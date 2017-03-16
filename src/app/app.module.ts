@@ -8,6 +8,10 @@ import { RecipesListPage } from '../pages/recipes-list/recipes-list';
 import { RecipePage } from '../pages/recipe/recipe';
 import { RecipeEditPage } from '../pages/recipe-edit/recipe-edit';
 
+import { ShoppingListService } from '../services/shopping-list';
+
+import { CapitalizePipe } from '../pipes/capitalize';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -15,7 +19,8 @@ import { RecipeEditPage } from '../pages/recipe-edit/recipe-edit';
     ShoppingListPage,
     RecipesListPage,
     RecipePage,
-    RecipeEditPage
+    RecipeEditPage,
+    CapitalizePipe
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -29,6 +34,7 @@ import { RecipeEditPage } from '../pages/recipe-edit/recipe-edit';
     RecipePage,
     RecipeEditPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
+    ShoppingListService]
 })
 export class AppModule {}

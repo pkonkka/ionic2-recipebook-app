@@ -1,22 +1,105 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActionSheetController, AlertController, NavParams } from 'ionic-angular';
 
-/*
-  Generated class for the RecipeEdit page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-recipe-edit',
   templateUrl: 'recipe-edit.html'
 })
-export class RecipeEditPage {
+export class RecipeEditPage implements OnInit {
+  mode = 'New';
+  selectOptions = ['Easy', 'Medium', 'Hard'];
+  recipeForm: FormGroup;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  // ---------------------------------------------------------------------
+  constructor(
+    private navParams: NavParams,
+    private actionSheetController: ActionSheetController,
+    private alertCtrl: AlertController) {
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RecipeEditPage');
   }
+
+  // ---------------------------------------------------------------------
+  ngOnInit() {
+    this.mode = this.navParams.get('mode');
+    this.initForm(this.mode);
+  }
+
+  // ---------------------------------------------------------------------
+  onSubmit() {
+    console.log(this.recipeForm);
+  }
+
+  // ---------------------------------------------------------------------
+  onManageIngredients() {
+    const actionSheet = this.actionSheetController.create({
+      title: 'What do you want to do?',
+      buttons: [
+        {
+          text: 'Add Ingredient',
+          handler: () => {
+            this.createNewIngredientAlert().present();
+          }
+        },
+        {
+          text: 'Remove all ingredients',
+          role: 'destructive',
+          handle: () => {
+
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+        ]
+    });
+    actionSheet.present();
+  }
+
+  // ---------------------------------------------------------------------
+  private createNewIngredientAlert() {
+
+    return this.alertCtrl.create({
+      title: 'Ingredient',
+      inputs: [
+        {
+          name: 'name',
+          placeholder: 'Name'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Add',
+          handler: data => {
+            if (data.name.trim() == '' || data.name == null) {
+              return;
+            }
+            (<FormArray>this.recipeForm.get('ingredients'))
+              .push(new FormControl(data.name, Validators.required));
+          }
+        }
+      ]
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  private initForm(mode: string) {
+
+    if (mode == 'New') {
+      this.recipeForm = new FormGroup({
+        'title': new FormControl(null, Validators.required),
+        'description': new FormControl(null, Validators.required),
+        'difficulty': new FormControl(this.selectOptions[1], Validators.required),
+        'ingredients': new FormArray([])
+      });
+    }
+  }
+
 
 }
