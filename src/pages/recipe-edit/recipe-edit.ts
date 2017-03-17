@@ -38,6 +38,7 @@ export class RecipeEditPage implements OnInit {
     this.recipe = this.navParams.get('recipe');
     this.recipeIndex = this.navParams.get('index');
     this.initForm(this.mode, this.recipe);
+
   }
 
   // ---------------------------------------------------------------------
@@ -169,13 +170,23 @@ export class RecipeEditPage implements OnInit {
         'ingredients': new FormArray([])
       });
     } else {
+
+      let recipeIngredients = [];
+
+      for (let ingredient of recipe.ingredients) {
+        recipeIngredients.push(new FormControl(ingredient.name, Validators.required));
+      }
+
+
       this.recipeForm = new FormGroup({
         'title': new FormControl(recipe.title, Validators.required),
         'description': new FormControl(recipe.description, Validators.required),
         'difficulty': new FormControl(recipe.difficulty, Validators.required),
-        'ingredients': new FormArray([])
+        'ingredients': new FormArray(recipeIngredients)
       });      
     }
+
+    console.log('recipeForm: ', this.recipeForm)
   }
 
 
