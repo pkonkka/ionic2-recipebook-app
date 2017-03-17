@@ -9,6 +9,7 @@ import { RecipePage } from '../pages/recipe/recipe';
 import { RecipeEditPage } from '../pages/recipe-edit/recipe-edit';
 
 import { ShoppingListService } from '../services/shopping-list';
+import { RecipeService } from '../services/recipe';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 
@@ -35,6 +36,7 @@ import { CapitalizePipe } from '../pipes/capitalize';
     RecipeEditPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
-    ShoppingListService]
+    ShoppingListService,
+    RecipeService]
 })
 export class AppModule {}

@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActionSheetController, AlertController, NavParams } from 'ionic-angular';
+import { 
+  ActionSheetController, 
+  AlertController, 
+  NavController,
+  NavParams,
+  ToastController } from 'ionic-angular';
 
+import { RecipeService } from '../../services/recipe';
+import { Recipe } from '../../models/recipe';
 
 @Component({
   selector: 'page-recipe-edit',
@@ -9,6 +16,8 @@ import { ActionSheetController, AlertController, NavParams } from 'ionic-angula
 })
 export class RecipeEditPage implements OnInit {
   mode = 'New';
+  recipe: Recipe;
+  recipeIndex = 0;
   selectOptions = ['Easy', 'Medium', 'Hard'];
   recipeForm: FormGroup;
 
@@ -16,20 +25,54 @@ export class RecipeEditPage implements OnInit {
   constructor(
     private navParams: NavParams,
     private actionSheetController: ActionSheetController,
-    private alertCtrl: AlertController) {
+    private alertCtrl: AlertController,
+    private tostCtrl: ToastController,
+    private recipeService: RecipeService,
+    private navCtrl: NavController) {
 
   }
 
   // ---------------------------------------------------------------------
   ngOnInit() {
     this.mode = this.navParams.get('mode');
-    this.initForm(this.mode);
+    this.recipe = this.navParams.get('recipe');
+    this.recipeIndex = this.navParams.get('index');
+    this.initForm(this.mode, this.recipe);
   }
 
   // ---------------------------------------------------------------------
   onSubmit() {
-    console.log(this.recipeForm);
+    const value = this.recipeForm.value;
+    let ingredients = [];
+    if (value.ingredients.length > 0) {
+      ingredients = value.ingredients.map(name => {
+        return {name: name, amount: 1}
+      });
+    }
+    if (this.mode == 'New') {
+      this.recipeService.addRecipe(
+        value.title,
+        value.description,
+        value.difficulty,
+        ingredients
+      );
+    } else {
+      this.recipeService.updateRecipe(
+        this.recipeIndex, 
+        value.title,
+        value.description,
+        value.difficulty,
+        ingredients);      
+    }
+    this.navCtrl.popToRoot();
   }
+
+  // ---------------------------------------------------------------------
+  onRemove() {
+    this.recipeService.removeRecipe(this.recipeIndex);
+    this.navCtrl.popToRoot();
+  }
+
 
   // ---------------------------------------------------------------------
   onManageIngredients() {
@@ -45,8 +88,22 @@ export class RecipeEditPage implements OnInit {
         {
           text: 'Remove all ingredients',
           role: 'destructive',
-          handle: () => {
+          handler: () => {
+            const fArray: FormArray = <FormArray>this.recipeForm.get('ingredients');
+            const len = fArray.length;
 
+            if (len > 0) {
+              for (let i = len-1; i >= 0; i--) {
+                fArray.removeAt(i);
+              }
+              const toast = this.tostCtrl.create({
+                message: 'All ingredients were deleted!',
+                duration: 1000,
+                position: 'bottom'
+              });
+              toast.present();
+              
+            }
           }
         },
         {
@@ -78,10 +135,23 @@ export class RecipeEditPage implements OnInit {
           text: 'Add',
           handler: data => {
             if (data.name.trim() == '' || data.name == null) {
+              const toast = this.tostCtrl.create({
+                message: 'Please enter a valid value!',
+                duration: 1000,
+                position: 'bottom'
+              });
+              toast.present();
               return;
             }
             (<FormArray>this.recipeForm.get('ingredients'))
               .push(new FormControl(data.name, Validators.required));
+              const toast = this.tostCtrl.create({
+                message: 'Item added!',
+                duration: 1000,
+                position: 'bottom'
+              });
+              toast.present();
+              
           }
         }
       ]
@@ -89,7 +159,7 @@ export class RecipeEditPage implements OnInit {
   }
 
   // ---------------------------------------------------------------------
-  private initForm(mode: string) {
+  private initForm(mode: string, recipe: Recipe) {
 
     if (mode == 'New') {
       this.recipeForm = new FormGroup({
@@ -98,6 +168,13 @@ export class RecipeEditPage implements OnInit {
         'difficulty': new FormControl(this.selectOptions[1], Validators.required),
         'ingredients': new FormArray([])
       });
+    } else {
+      this.recipeForm = new FormGroup({
+        'title': new FormControl(recipe.title, Validators.required),
+        'description': new FormControl(recipe.description, Validators.required),
+        'difficulty': new FormControl(recipe.difficulty, Validators.required),
+        'ingredients': new FormArray([])
+      });      
     }
   }
 

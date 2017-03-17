@@ -48,6 +48,11 @@
         </ion-item>
       </ion-list>
 
-    <button type="submit" ion-button block>Save Recipe</button>
+    <button 
+      type="submit" 
+      ion-button 
+      block
+      [disabled]="!recipeForm.valid">Save Recipe</button>
+      
   </form>
 </ion-content>
