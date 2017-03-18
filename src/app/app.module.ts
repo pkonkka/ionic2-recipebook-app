@@ -7,6 +7,8 @@ import { ShoppingListPage } from '../pages/shopping-list/shopping-list';
 import { RecipesListPage } from '../pages/recipes-list/recipes-list';
 import { RecipePage } from '../pages/recipe/recipe';
 import { RecipeEditPage } from '../pages/recipe-edit/recipe-edit';
+import { SigninPage } from '../pages/signin/signin';
+import { SignupPage } from '../pages/signup/signup';
 
 import { ShoppingListService } from '../services/shopping-list';
 import { RecipeService } from '../services/recipe';
@@ -21,6 +23,8 @@ import { CapitalizePipe } from '../pipes/capitalize';
     RecipesListPage,
     RecipePage,
     RecipeEditPage,
+    SigninPage,
+    SignupPage,
     CapitalizePipe
   ],
   imports: [
@@ -33,7 +37,10 @@ import { CapitalizePipe } from '../pipes/capitalize';
     ShoppingListPage,
     RecipesListPage,
     RecipePage,
-    RecipeEditPage
+    RecipeEditPage,
+    SigninPage,
+    SignupPage,
+    
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
     ShoppingListService,

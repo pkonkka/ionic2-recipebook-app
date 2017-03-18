@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { Ingredient } from '../../models/ingredient';
@@ -9,7 +9,7 @@ import { ShoppingListService } from '../../services/shopping-list';
   selector: 'page-shopping-list',
   templateUrl: 'shopping-list.html'
 })
-export class ShoppingListPage {
+export class ShoppingListPage implements OnInit {
   listItems: Ingredient[];
 
   // ----------------------------------------------------------------------------
@@ -17,9 +17,16 @@ export class ShoppingListPage {
 
   }
 
+  ngOnInit() {
+    this.loadItems();
+    console.log('ngOnInit: ', this.listItems);
+    
+  }
+
   // ----------------------------------------------------------------------------
   ionWillEnter() {
-    this.loadItems();
+    // this.loadItems();
+    // console.log('ionWillEnter: ', this.listItems);
   }
 
   // ----------------------------------------------------------------------------
@@ -38,6 +45,7 @@ export class ShoppingListPage {
   // ----------------------------------------------------------------------------
   private loadItems() {
     this.listItems = this.slService.getItems();
+    console.log('loadItems: ', this.listItems);
   }
 
 }
