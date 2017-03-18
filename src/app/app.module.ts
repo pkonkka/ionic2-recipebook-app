@@ -12,6 +12,7 @@ import { SignupPage } from '../pages/signup/signup';
 
 import { ShoppingListService } from '../services/shopping-list';
 import { RecipeService } from '../services/recipe';
+import { AuthService } from '../services/auth';
 
 import { CapitalizePipe } from '../pipes/capitalize';
 
@@ -44,6 +45,7 @@ import { CapitalizePipe } from '../pipes/capitalize';
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},
     ShoppingListService,
-    RecipeService]
+    RecipeService,
+    AuthService]
 })
 export class AppModule {}
