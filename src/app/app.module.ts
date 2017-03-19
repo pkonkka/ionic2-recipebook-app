@@ -9,6 +9,7 @@ import { RecipePage } from '../pages/recipe/recipe';
 import { RecipeEditPage } from '../pages/recipe-edit/recipe-edit';
 import { SigninPage } from '../pages/signin/signin';
 import { SignupPage } from '../pages/signup/signup';
+import { DatabaseOptionsPage } from '../pages/database-options/database-options';
 
 import { ShoppingListService } from '../services/shopping-list';
 import { RecipeService } from '../services/recipe';
@@ -26,6 +27,7 @@ import { CapitalizePipe } from '../pipes/capitalize';
     RecipeEditPage,
     SigninPage,
     SignupPage,
+    DatabaseOptionsPage,
     CapitalizePipe
   ],
   imports: [
@@ -41,6 +43,7 @@ import { CapitalizePipe } from '../pipes/capitalize';
     RecipeEditPage,
     SigninPage,
     SignupPage,
+    DatabaseOptionsPage
     
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},

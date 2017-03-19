@@ -13,8 +13,13 @@ export class AuthService {
     }
 
     // ------------------------------------------------------------------
-    geCurrenttuser() {
-        firebase.auth().currentUser;
+    logout() {
+        firebase.auth().signOut();
+    }
+
+    // ------------------------------------------------------------------
+    geCurrentUser() {
+        return firebase.auth().currentUser;
     }
 
 }
