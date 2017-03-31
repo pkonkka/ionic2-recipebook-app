@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AlertController, LoadingController } from 'ionic-angular';
+import { AlertController, LoadingController, NavController } from 'ionic-angular';
 
 import { AuthService } from '../../services/auth';
 
@@ -13,7 +13,8 @@ export class SigninPage {
   constructor(
     private authService: AuthService,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController) {}
+    private alertCtrl: AlertController,
+    private navCtrl: NavController) {}
 
   // -------------------------------------------------------------
   onSignin(form: NgForm) {
@@ -26,6 +27,7 @@ export class SigninPage {
     this.authService.signin(form.value.email, form.value.password)
       .then(data => {
         loading.dismiss();
+        this.navCtrl.popToRoot();
       })
       .catch(error => {
         loading.dismiss();
